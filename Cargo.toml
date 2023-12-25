@@ -9,7 +9,8 @@ authors = ["uiuifree"]
 description = "LineMessagingApi for Rust"
 license = "MIT"
 keywords = ["Line", "LineMessagingApi"]
-
+readme="README.md"
+repository = "https://github.com/uiuifree/rust-line-messaging-api"
 [dependencies]
 
 serde = { version = "~1" }
