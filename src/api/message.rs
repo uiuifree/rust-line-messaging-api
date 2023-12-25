@@ -1,14 +1,20 @@
-use crate::message::{
-    LineApiMessageBroadcastRequest, LineApiMessageMulticastRequest, LineApiMessagePushRequest,
-};
+use crate::message::{LineApiMessageBroadcastRequest, LineApiMessageMulticastRequest, LineApiMessagePushRequest, LineApiMessageReplyRequest};
 use crate::{LineApiResponse, LineClient};
 use serde_derive::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
 impl LineClient {
-    //
     // エンドポイント一覧
     // POST /v2/bot/message/reply
+    /// https://developers.line.biz/ja/reference/messaging-api/#send-reply-message
+    pub async fn message_send_reply(
+        &self,
+        request: &LineApiMessageReplyRequest,
+    ) -> LineApiResponse<LineApiMessageReplyResponse> {
+        self.http_post("https://api.line.me/v2/bot/message/reply", &request)
+            .await
+    }
+
     // POST /v2/bot/message/push
     /// https://developers.line.biz/ja/reference/messaging-api/#send-push-message
     pub async fn message_send_push(
@@ -223,6 +229,11 @@ impl LineClient {
     }
 }
 
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
+pub struct LineApiMessageReplyResponse {
+    #[serde(rename = "sentMessages")]
+    pub sent_messages: Vec<LineApiSendMessage>,
+}
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiMessagePushResponse {
     #[serde(rename = "sentMessages")]
