@@ -42,7 +42,6 @@ impl LineClient {
 
         let status = response.status();
 
-        println!("hoge1 {}", status.as_u16());
         let body = match response.bytes().await {
             Ok(v) => v.to_vec(),
             Err(e) => {
