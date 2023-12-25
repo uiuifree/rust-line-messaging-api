@@ -1,6 +1,6 @@
-use serde_derive::{Deserialize, Serialize};
 use crate::action::LineActionObject;
 use crate::message::LineMessageImageMapActionObject;
+use serde_derive::{Deserialize, Serialize};
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineMessageActionCamera {

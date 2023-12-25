@@ -57,7 +57,7 @@ impl LineClient {
     }
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiInsightMessageDeliveryResponse {
     pub status: String,
     pub broadcast: Option<u32>,
@@ -80,7 +80,7 @@ pub struct LineApiInsightMessageDeliveryResponse {
     pub api_reply: Option<u32>,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiInsightFollowersResponse {
     pub status: String,
     pub followers: Option<u32>,
@@ -89,7 +89,7 @@ pub struct LineApiInsightFollowersResponse {
     pub blocks: Option<u32>,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiInsightDemographicResponse {
     pub available: bool,
     pub genders: Vec<LineApiInsightDemographicGender>,
@@ -101,32 +101,32 @@ pub struct LineApiInsightDemographicResponse {
     pub subscription_periods: Vec<LineApiInsightDemographicSubscriptionPeriods>,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiInsightDemographicGender {
     gender: String,
     percentage: f32,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiInsightDemographicAge {
     age: String,
     percentage: f32,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiInsightDemographicArea {
     area: String,
     percentage: f32,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiInsightDemographicAppType {
     #[serde(rename = "appType")]
     app_type: String,
     percentage: f32,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiInsightDemographicSubscriptionPeriods {
     #[serde(rename = "subscriptionPeriod")]
     subscription_period: String,

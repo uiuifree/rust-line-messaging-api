@@ -2,7 +2,7 @@ use crate::message::LineMessageObject;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineMessageText {
     #[serde(rename = "type")]
     message_type: String,
@@ -15,10 +15,10 @@ pub struct LineMessageText {
 }
 
 impl LineMessageText {
-    pub fn new<T:ToString>(text: T) -> LineMessageText {
+    pub fn new<T: ToString>(text: T) -> LineMessageText {
         LineMessageText {
             message_type: "text".to_string(),
-            text:text.to_string(),
+            text: text.to_string(),
             emojis: None,
             quote_token: None,
         }
@@ -36,7 +36,7 @@ impl LineMessageObject for LineMessageText {
     }
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineMessageEmoji {
     #[serde(skip_serializing_if = "Option::is_none")]
     index: Option<u32>,

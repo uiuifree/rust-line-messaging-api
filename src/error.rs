@@ -1,6 +1,6 @@
 use serde_derive::{Deserialize, Serialize};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LineError {
     ApiError(LineApiError),
     HttpError(LineHttpError),
@@ -42,7 +42,7 @@ impl From<LineSystemError> for LineError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct LineApiError {
     pub status: u16,
     pub error: LineApiErrorResponse,
@@ -51,7 +51,7 @@ pub struct LineApiError {
 }
 
 /// https://developers.line.biz/ja/reference/messaging-api/#error-responses
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct LineApiErrorResponse {
     pub message: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -59,7 +59,7 @@ pub struct LineApiErrorResponse {
 }
 
 /// https://developers.line.biz/ja/reference/messaging-api/#error-responses
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct LineApiErrorResponseDetail {
     pub message: String,
     pub property: String,
@@ -76,7 +76,7 @@ impl LineApiErrorResponse {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LineHttpError {
     pub status: u16,
     pub http_response_body: Option<String>,
@@ -91,7 +91,7 @@ impl LineHttpError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LineSystemError {
     pub message: Option<String>,
 }

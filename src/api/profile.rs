@@ -21,13 +21,13 @@ impl LineClient {
     }
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiFollowersIdsRequest {
     pub limit: Option<u32>,
     pub start: Option<String>,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiProfileResponse {
     #[serde(rename = "displayName")]
     pub display_name: String,

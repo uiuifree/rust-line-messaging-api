@@ -1,7 +1,7 @@
+use crate::action::LineActionObject;
 use crate::message::LineMessageObject;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::json;
-use crate::action::LineActionObject;
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineActionUri {

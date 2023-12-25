@@ -10,7 +10,7 @@ impl LineClient {
     }
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiBotInfoResponse {
     #[serde(rename = "userId")]
     pub user_id: String,

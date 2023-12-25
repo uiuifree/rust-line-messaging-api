@@ -11,9 +11,14 @@ impl LineClient {
         user_id: &str,
     ) -> LineApiResponse<LineApiRichMenuUserEmptyResponse> {
         self.http_post(
-            format!("https://api.line.me/v2/bot/user/{}/richmenu/{}", user_id, rich_menu_id).as_str(),
-            &json!({}))
-            .await
+            format!(
+                "https://api.line.me/v2/bot/user/{}/richmenu/{}",
+                user_id, rich_menu_id
+            )
+            .as_str(),
+            &json!({}),
+        )
+        .await
     }
     /// https://developers.line.biz/ja/reference/messaging-api/#link-rich-menu-to-users
     // POST   /v2/bot/richmenu/bulk/link
@@ -27,8 +32,9 @@ impl LineClient {
             &json!({
                 "richMenuId": rich_menu_id,
                 "userIds": user_id,
-            }))
-            .await
+            }),
+        )
+        .await
     }
     // GET    /v2/bot/user/{userId}/richmenu
 
@@ -39,8 +45,9 @@ impl LineClient {
     ) -> LineApiResponse<LineApiRichMenuUserGetUserRichMenuId> {
         self.http_get(
             format!("https://api.line.me/v2/bot/user/{}/richmenu", user_id).as_str(),
-            &json!({}))
-            .await
+            &json!({}),
+        )
+        .await
     }
     // DELETE /v2/bot/user/{userId}/richmenu
     pub async fn rich_menu_user_unlink_user_rich_menu(
@@ -49,8 +56,9 @@ impl LineClient {
     ) -> LineApiResponse<LineApiRichMenuUserEmptyResponse> {
         self.http_delete(
             format!("https://api.line.me/v2/bot/user/{}/richmenu", user_id).as_str(),
-            &json!({}))
-            .await
+            &json!({}),
+        )
+        .await
     }
     // POST   /v2/bot/richmenu/bulk/unlink
     pub async fn rich_menu_user_unlink_menu_bulk(
@@ -61,20 +69,19 @@ impl LineClient {
             "https://api.line.me/v2/bot/richmenu/bulk/unlink",
             &json!({
                 "userIds": user_id,
-            }))
-            .await
+            }),
+        )
+        .await
     }
     // POST   /v2/bot/richmenu/batch
     // GET    /v2/bot/richmenu/progress/batch
     // POST   /v2/bot/richmenu/validate/batch
 }
 
-
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiRichMenuUserEmptyResponse {}
 
-
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiRichMenuUserGetUserRichMenuId {
     #[serde(rename = "richMenuId")]
     pub rich_menu_id: String,

@@ -31,18 +31,18 @@ impl LineClient {
     }
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiWebhookEndpointGetResponse {
     pub endpoint: String,
     pub active: bool,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiWebhookTestRequest {
     pub endpoint: Option<String>,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiWebhookTestResponse {
     pub success: bool,
     pub timestamp: String,

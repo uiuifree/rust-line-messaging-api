@@ -1,7 +1,7 @@
 use crate::action::LineActionObject;
+use crate::message::LineMessageObject;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::{json, Value};
-use crate::message::LineMessageObject;
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct LineMessageTemplate {
@@ -21,7 +21,7 @@ impl LineMessageTemplate {
         }
     }
 }
-impl LineMessageObject for LineMessageTemplate{
+impl LineMessageObject for LineMessageTemplate {
     fn build(&self) -> Value {
         json!(self)
     }
@@ -73,10 +73,10 @@ impl LineMessageTemplateButton {
             actions: vec![],
         }
     }
-    pub fn set_default_action(&mut self,action: impl LineActionObject){
+    pub fn set_default_action(&mut self, action: impl LineActionObject) {
         self.default_action = Some(action.build());
     }
-    pub fn append_action(&mut self,action: impl LineActionObject){
+    pub fn append_action(&mut self, action: impl LineActionObject) {
         self.actions.push(action.build());
     }
     pub fn set_thumbnail_image_url<T: ToString>(&mut self, thumbnail_image_url: T) {
@@ -120,10 +120,9 @@ impl LineMessageTemplateConfirm {
             actions: vec![],
         }
     }
-    pub fn append_action(&mut self,action: impl LineActionObject){
+    pub fn append_action(&mut self, action: impl LineActionObject) {
         self.actions.push(action.build());
     }
-
 }
 impl LineMessageTemplateObject for LineMessageTemplateConfirm {
     fn build(&self) -> Value {
@@ -153,7 +152,7 @@ impl LineMessageTemplateCarousel {
             image_size: None,
         }
     }
-    pub fn append_column(&mut self,column: LineMessageTemplateCarouselColumn){
+    pub fn append_column(&mut self, column: LineMessageTemplateCarouselColumn) {
         self.columns.push(column);
     }
     pub fn set_image_aspect_ratio<T: ToString>(&mut self, image_aspect_ratio: T) {
@@ -188,8 +187,7 @@ pub struct LineMessageTemplateCarouselColumn {
     actions: Vec<Value>,
 }
 
-impl LineMessageTemplateCarouselColumn{
-
+impl LineMessageTemplateCarouselColumn {
     pub fn new<T: ToString>(text: T) -> Self {
         Self {
             thumbnail_image_url: None,
@@ -200,10 +198,10 @@ impl LineMessageTemplateCarouselColumn{
             actions: vec![],
         }
     }
-    pub fn set_default_action(&mut self,action: impl LineActionObject){
+    pub fn set_default_action(&mut self, action: impl LineActionObject) {
         self.default_action = Some(action.build());
     }
-    pub fn append_action(&mut self,action: impl LineActionObject){
+    pub fn append_action(&mut self, action: impl LineActionObject) {
         self.actions.push(action.build());
     }
     pub fn set_thumbnail_image_url<T: ToString>(&mut self, thumbnail_image_url: T) {
@@ -225,14 +223,14 @@ pub struct LineMessageTemplateCarouselImage {
     columns: Vec<LineMessageTemplateCarouselImageColumn>,
 }
 
-impl LineMessageTemplateCarouselImage{
+impl LineMessageTemplateCarouselImage {
     pub fn new(columns: Vec<LineMessageTemplateCarouselImageColumn>) -> Self {
         Self {
             message_type: "image_carousel".to_string(),
             columns,
         }
     }
-    pub fn append_column(&mut self,column: LineMessageTemplateCarouselImageColumn){
+    pub fn append_column(&mut self, column: LineMessageTemplateCarouselImageColumn) {
         self.columns.push(column);
     }
 }
@@ -248,8 +246,8 @@ pub struct LineMessageTemplateCarouselImageColumn {
     #[serde(rename = "action")]
     action: Value,
 }
-impl LineMessageTemplateCarouselImageColumn{
-    pub fn new<T: ToString>(image_url: T,action: impl LineActionObject) -> Self {
+impl LineMessageTemplateCarouselImageColumn {
+    pub fn new<T: ToString>(image_url: T, action: impl LineActionObject) -> Self {
         Self {
             image_url: image_url.to_string(),
             action: action.build(),

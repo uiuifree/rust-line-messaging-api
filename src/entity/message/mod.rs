@@ -2,6 +2,7 @@ use serde_derive::{Deserialize, Serialize};
 use serde_json::Value;
 
 mod audio;
+mod flex;
 mod image;
 mod image_map;
 mod location;
@@ -9,10 +10,9 @@ mod sticker;
 mod template;
 mod text;
 mod video;
-mod flex;
 
-pub use flex::*;
 pub use audio::*;
+pub use flex::*;
 pub use image::*;
 pub use image_map::*;
 pub use location::*;
@@ -84,7 +84,7 @@ impl LineMessagesBuilder {
     }
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiMessageReplyRequest {
     #[serde(rename = "notificationDisabled")]
     pub reply_token: String,
@@ -95,7 +95,7 @@ pub struct LineApiMessageReplyRequest {
     pub notification_disabled: Option<bool>,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiMessagePushRequest {
     pub to: String,
     pub messages: Vec<Value>,
@@ -107,7 +107,7 @@ pub struct LineApiMessagePushRequest {
     pub custom_aggregation_units: Option<Vec<String>>,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiMessageMulticastRequest {
     pub to: Vec<String>,
     pub messages: Vec<Value>,
@@ -119,7 +119,7 @@ pub struct LineApiMessageMulticastRequest {
     pub custom_aggregation_units: Option<Vec<String>>,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiMessageBroadcastRequest {
     pub messages: Vec<Value>,
     #[serde(skip_serializing_if = "Option::is_none")]

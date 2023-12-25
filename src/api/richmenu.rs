@@ -47,7 +47,7 @@ impl LineClient {
         )
         .await
     }
-    /// https://developers.line.biz/ja/reference/messaging-api/#delete-rich-menu
+    /// https://developers.line.biz/ja/reference/messaging-api/#get-rich-menu-list
     pub async fn rich_menu_list(&self) -> LineApiResponse<LineApiRichMenuListResponse> {
         self.http_get("https://api.line.me/v2/bot/richmenu/list", &json!({}))
             .await
@@ -58,6 +58,17 @@ impl LineClient {
         rich_menu_id: &str,
     ) -> LineApiResponse<LineApiRichMenuDeleteResponse> {
         self.http_delete(
+            format!("https://api.line.me/v2/bot/richmenu/{}", rich_menu_id).as_str(),
+            &json!({}),
+        )
+        .await
+    }
+    /// https://developers.line.biz/ja/reference/messaging-api/#delete-rich-menu
+    pub async fn rich_menu_get(
+        &self,
+        rich_menu_id: &str,
+    ) -> LineApiResponse<LineApiRichMenuGetResponse> {
+        self.http_get(
             format!("https://api.line.me/v2/bot/richmenu/{}", rich_menu_id).as_str(),
             &json!({}),
         )
@@ -95,13 +106,13 @@ impl LineClient {
     }
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiRichMenuCreateResponse {
     #[serde(rename = "richMenuId")]
     pub rich_menu_id: String,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiRichMenuValidateObjectResponse {}
 
 #[derive(Debug, Default, Clone, Deserialize, Serialize)]
@@ -109,13 +120,13 @@ pub struct SlackApiFilesUploadRequest {
     pub file: Option<String>,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiRichMenuListResponse {
     #[serde(rename = "richmenus")]
     pub rich_menus: Vec<RichMenu>,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct RichMenu {
     #[serde(rename = "richMenuId")]
     pub rich_menu_id: String,
@@ -131,19 +142,19 @@ pub struct RichMenu {
     pub areas: Vec<RichMenuArea>,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct RichMenuSize {
     pub width: u32,
     pub height: u32,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct RichMenuArea {
     pub bounds: RichMenuAreaBounds,
     pub action: RichMenuAction,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct RichMenuAreaBounds {
     pub x: u32,
     pub y: u32,
@@ -151,24 +162,29 @@ pub struct RichMenuAreaBounds {
     pub height: u32,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct RichMenuAction {
     #[serde(rename = "type")]
     pub action_type: String,
     pub data: Option<String>,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
+pub struct LineApiRichMenuGetResponse {
+    #[serde(flatten)]
+    pub rich_menu: RichMenu,
+}
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiRichMenuDeleteResponse {}
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiRichMenuSetDefaultResponse {}
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiRichMenuGetDefaultResponse {
     #[serde(rename = "richMenuId")]
     pub rich_menu_id: String,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiRichMenuDeleteDefaultResponse {}
