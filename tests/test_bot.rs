@@ -1,4 +1,4 @@
-use line_messaging_api::LineClient;
+use line_bot_messaging_api::LineClient;
 
 #[tokio::test]
 async fn test() {

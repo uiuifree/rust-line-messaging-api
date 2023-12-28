@@ -1,6 +1,6 @@
 use crate::{LineApiResponse, LineClient};
 use serde_derive::{Deserialize, Serialize};
-use serde_json::{json, Value};
+use serde_json::json;
 
 impl LineClient {
     // POST   /v2/bot/user/{userId}/richmenu/{richMenuId}

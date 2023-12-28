@@ -1,10 +1,9 @@
 use line_bot_messaging_api::action::{LineActionUri, LineMessageActionCamera};
 use line_bot_messaging_api::message::{
-    LineMessageFlex, LineMessageImage, LineMessageImageMap, LineMessageImageMapActionUri,
-    LineMessageImageMapArea, LineMessageImageMapBaseSize, LineMessageTemplate,
-    LineMessageTemplateButton, LineMessageTemplateCarousel, LineMessageTemplateCarouselColumn,
-    LineMessageTemplateCarouselImage, LineMessageTemplateCarouselImageColumn,
-    LineMessageTemplateConfirm, LineMessageText, LineMessageVideo, LineMessagesBuilder,
+    LineMessageFlex, LineMessageTemplate, LineMessageTemplateButton, LineMessageTemplateCarousel,
+    LineMessageTemplateCarouselColumn, LineMessageTemplateCarouselImage,
+    LineMessageTemplateCarouselImageColumn, LineMessageTemplateConfirm, LineMessageText,
+    LineMessagesBuilder,
 };
 use line_bot_messaging_api::{LineClient, LineError};
 use serde_json::{json, Value};

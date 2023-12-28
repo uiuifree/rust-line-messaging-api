@@ -1,4 +1,7 @@
-use crate::message::{LineApiMessageBroadcastRequest, LineApiMessageMulticastRequest, LineApiMessagePushRequest, LineApiMessageReplyRequest};
+use crate::message::{
+    LineApiMessageBroadcastRequest, LineApiMessageMulticastRequest, LineApiMessagePushRequest,
+    LineApiMessageReplyRequest,
+};
 use crate::{LineApiResponse, LineClient};
 use serde_derive::{Deserialize, Serialize};
 use serde_json::{json, Value};

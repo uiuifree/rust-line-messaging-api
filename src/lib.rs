@@ -1,12 +1,12 @@
 pub mod api;
 mod entity;
 mod error;
+pub(crate) mod util;
 
 pub use entity::*;
 pub use error::*;
 use reqwest::{Body, Method, RequestBuilder, Url};
 use serde_json::{json, Value};
-use std::io::Read;
 
 pub struct LineClient {
     pub(crate) context: LineContext,
@@ -192,23 +192,23 @@ fn builder2(url: Url, method: reqwest::Method, token: &str) -> RequestBuilder {
         .header("Authorization", format!("Bearer {}", token))
 }
 
-fn get_error_value(value: &Value) -> Vec<String> {
-    match value.get("error") {
-        None => {
-            vec![]
-        }
-        Some(v) => {
-            if v.is_string() {
-                return match v.as_str() {
-                    None => {
-                        vec![]
-                    }
-                    Some(v) => {
-                        vec![v.to_string()]
-                    }
-                };
-            }
-            vec![]
-        }
-    }
-}
+// fn get_error_value(value: &Value) -> Vec<String> {
+//     match value.get("error") {
+//         None => {
+//             vec![]
+//         }
+//         Some(v) => {
+//             if v.is_string() {
+//                 return match v.as_str() {
+//                     None => {
+//                         vec![]
+//                     }
+//                     Some(v) => {
+//                         vec![v.to_string()]
+//                     }
+//                 };
+//             }
+//             vec![]
+//         }
+//     }
+// }
