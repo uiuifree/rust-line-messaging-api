@@ -1,5 +1,4 @@
 use crate::util::LineUtil;
-use serde::{Deserialize, Deserializer};
 use serde_derive::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -16,6 +15,7 @@ pub enum LineWebhookEventMessage {
     #[default]
     None,
 }
+
 
 impl LineWebhookEventMessage {
     pub fn from_value(message: &Value) -> LineWebhookEventMessage {
@@ -45,143 +45,155 @@ impl LineWebhookEventMessage {
             _ => LineWebhookEventMessage::None,
         }
     }
+    pub fn text(&self) -> &str {
+        match self {
+            LineWebhookEventMessage::Text(v) => v.text.as_str(),
+            LineWebhookEventMessage::Video(_) => "",
+            LineWebhookEventMessage::Image(_) => "",
+            LineWebhookEventMessage::Audio(_) => "",
+            LineWebhookEventMessage::File(_) => "",
+            LineWebhookEventMessage::Location(_) => "",
+            LineWebhookEventMessage::Sticker(_) => "",
+            LineWebhookEventMessage::None => "",
+        }
+    }
 }
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineWebhookEventMessageText {
-    id: String,
+    pub id: String,
     #[serde(rename = "type")]
-    message_type: String,
+    pub message_type: String,
     #[serde(rename = "quoteToken")]
-    quote_token: String,
+    pub quote_token: String,
     #[serde(rename = "text")]
-    text: String,
+    pub text: String,
     #[serde(rename = "emojis")]
-    emojis: Option<Vec<LineWebhookEventMessageTextEmoji>>,
+    pub emojis: Option<Vec<LineWebhookEventMessageTextEmoji>>,
     #[serde(rename = "mention")]
-    mention: Option<LineWebhookEventMessageTextMention>,
+    pub mention: Option<LineWebhookEventMessageTextMention>,
     #[serde(rename = "quotedMessageId")]
-    quoted_message_id: Option<String>,
+    pub quoted_message_id: Option<String>,
 }
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineWebhookEventMessageTextEmoji {
-    index: u32,
-    length: u32,
+    pub index: u32,
+    pub length: u32,
     #[serde(rename = "productId")]
-    product_id: String,
+    pub product_id: String,
     #[serde(rename = "emojiId")]
-    emoji_id: String,
+    pub emoji_id: String,
     #[serde(rename = "quotedMessageId")]
-    quoted_message_id: Option<String>,
+    pub quoted_message_id: Option<String>,
 }
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineWebhookEventMessageTextMention {
-    mentionees: Vec<LineWebhookEventMessageTextMentionMentionees>,
+    pub mentionees: Vec<LineWebhookEventMessageTextMentionMentionees>,
 }
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineWebhookEventMessageTextMentionMentionees {
-    index: u32,
-    length: u32,
+    pub index: u32,
+    pub length: u32,
     #[serde(rename = "type")]
-    mention_type: String,
+    pub mention_type: String,
     #[serde(rename = "userId")]
-    user_id: Option<String>,
+    pub user_id: Option<String>,
 }
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineWebhookEventMessageImage {
-    id: String,
+    pub id: String,
     #[serde(rename = "type")]
-    message_type: String,
+    pub message_type: String,
     #[serde(rename = "quoteToken")]
-    quote_token: String,
+    pub quote_token: String,
     #[serde(rename = "contentProvider")]
-    content_provider: LineWebhookEventMessageContentProvider,
+    pub content_provider: LineWebhookEventMessageContentProvider,
     #[serde(rename = "imageSet")]
-    image_set: Option<LineWebhookEventMessageImageImageSet>,
+    pub image_set: Option<LineWebhookEventMessageImageImageSet>,
 }
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineWebhookEventMessageImageImageSet {
-    id: Option<String>,
-    index: Option<u32>,
-    total: Option<u32>,
+    pub id: Option<String>,
+    pub index: Option<u32>,
+    pub total: Option<u32>,
 }
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineWebhookEventMessageVideo {
-    id: String,
+    pub id: String,
     #[serde(rename = "type")]
-    message_type: String,
+    pub message_type: String,
     #[serde(rename = "quoteToken")]
-    quote_token: String,
+    pub quote_token: String,
     #[serde(rename = "duration")]
-    duration: Option<u32>,
+    pub duration: Option<u32>,
     #[serde(rename = "contentProvider")]
-    content_provider: LineWebhookEventMessageContentProvider,
+    pub content_provider: LineWebhookEventMessageContentProvider,
 }
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineWebhookEventMessageAudio {
-    id: String,
+    pub id: String,
     #[serde(rename = "type")]
-    message_type: String,
+    pub message_type: String,
     #[serde(rename = "duration")]
-    duration: Option<u32>,
+    pub duration: Option<u32>,
     #[serde(rename = "contentProvider")]
-    content_provider: LineWebhookEventMessageContentProvider,
+    pub content_provider: LineWebhookEventMessageContentProvider,
 }
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineWebhookEventMessageFile {
-    id: String,
+    pub id: String,
     #[serde(rename = "type")]
-    message_type: String,
+    pub message_type: String,
     #[serde(rename = "fileName")]
-    file_name: String,
+    pub file_name: String,
     #[serde(rename = "fileSize")]
-    file_size: u32,
+    pub file_size: u32,
 }
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineWebhookEventMessageLocation {
-    id: String,
+    pub id: String,
     #[serde(rename = "type")]
-    message_type: String,
-    title: Option<String>,
-    address: Option<String>,
-    latitude: f32,
-    longitude: f32,
+    pub message_type: String,
+    pub title: Option<String>,
+    pub address: Option<String>,
+    pub latitude: f32,
+    pub longitude: f32,
 }
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineWebhookEventMessageSticker {
-    id: String,
+    pub id: String,
     #[serde(rename = "type")]
-    message_type: String,
+    pub message_type: String,
     #[serde(rename = "quoteToken")]
-    quote_token: String,
+    pub quote_token: String,
     #[serde(rename = "packageId")]
-    package_id: String,
+    pub package_id: String,
     #[serde(rename = "stickerId")]
-    sticker_id: String,
+    pub sticker_id: String,
     #[serde(rename = "stickerResourceType")]
-    sticker_resource_type: String,
-    keywords: Option<Vec<String>>,
-    text: Option<String>,
+    pub sticker_resource_type: String,
+    pub keywords: Option<Vec<String>>,
+    pub text: Option<String>,
     #[serde(rename = "quotedMessageId")]
-    quoted_message_id: Option<String>,
+    pub quoted_message_id: Option<String>,
 }
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineWebhookEventMessageContentProvider {
     #[serde(rename = "type")]
-    content_provider_type: String,
+    pub content_provider_type: String,
     #[serde(rename = "originalContentUrl")]
-    original_content_url: Option<String>,
+    pub original_content_url: Option<String>,
     #[serde(rename = "previewImageUrl")]
-    preview_image_url: Option<String>,
+    pub preview_image_url: Option<String>,
 }
