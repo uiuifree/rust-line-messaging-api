@@ -28,7 +28,9 @@ pub trait LineMessageObject {
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct LineMessagesBuilder {
     pub messages: Vec<Value>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_disabled: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_aggregation_units: Option<Vec<String>>,
 }
 
@@ -88,7 +90,7 @@ impl LineMessagesBuilder {
 pub struct LineApiMessageReplyRequest {
     #[serde(rename = "notificationDisabled")]
     pub reply_token: String,
-    #[serde(flatten)]
+    // #[serde(flatten)]
     pub messages: Vec<Value>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "notificationDisabled")]
