@@ -88,7 +88,7 @@ impl LineMessagesBuilder {
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone)]
 pub struct LineApiMessageReplyRequest {
-    #[serde(rename = "notificationDisabled")]
+    #[serde(rename = "replyToken")]
     pub reply_token: String,
     // #[serde(flatten)]
     pub messages: Vec<Value>,
