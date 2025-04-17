@@ -1,3 +1,4 @@
+use std::env;
 use line_bot_messaging_api::action::{LineActionUri, LineMessageActionCamera};
 use line_bot_messaging_api::message::{
     LineMessageFlex, LineMessageTemplate, LineMessageTemplateButton, LineMessageTemplateCarousel,
@@ -9,8 +10,8 @@ use line_bot_messaging_api::{LineClient, LineError};
 use serde_json::{json, Value};
 
 fn get_client() -> LineClient {
-    let token = env!("TOKEN");
-    LineClient::new(token)
+    let token = env::var("TOKEN").unwrap();
+    LineClient::new(&token)
 }
 
 #[tokio::test]

@@ -689,3 +689,52 @@ async fn test2() {
         }
     }
 }
+#[tokio::test]
+async fn test3() {
+    let test_data_list = vec![
+        r#"{
+    "destination": "xxxxxxxxxx",
+    "events": [
+        {
+            "replyToken": "b60d432864f44d079f6d8efe86cf404b",
+            "type": "postback",
+            "mode": "active",
+            "source": {
+                "userId": "U91eeaf62d...",
+                "type": "user"
+            },
+            "timestamp": 1619754620404,
+            "webhookEventId": "01FZ74A0TDDPYRVKNK77XKC3ZR",
+            "deliveryContext": {
+                "isRedelivery": false
+            },
+            "postback": {
+                "data": "postbacl-data"
+            }
+        }
+    ]
+}
+"#,
+    ];
+
+    for test in test_data_list {
+        println!("----------------");
+        for event in LineWebhook::parse_str(test).events() {
+            println!("event {:?}", event);
+            println!("reply_token {:?}", event.reply_token());
+            println!("data {:?}", event.data());
+            println!("source {:?}", event.source());
+            println!("json {:?}", event.json());
+
+            match event.data() {
+                LineWebhookEventObject::Postback(v) => {
+                    println!("message {:?}", v);
+                    println!("message {:?}", v.data);
+                }
+                _ => {
+                    assert!(false)
+                }
+            }
+        }
+    }
+}

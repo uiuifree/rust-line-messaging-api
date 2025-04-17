@@ -2,8 +2,10 @@ use serde_derive::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize, Clone, Default)]
 pub struct LineWebhookEventPostback {
+    #[serde(default)]
     #[serde(rename = "data")]
     pub data: String,
+    #[serde(default)]
     pub params: LineWebhookEventPostbackParams,
 }
 
