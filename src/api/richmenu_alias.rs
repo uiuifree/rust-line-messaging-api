@@ -51,7 +51,7 @@ impl LineClient {
         .await
     }
     // https://developers.line.biz/ja/reference/messaging-api/#get-rich-menu-alias-list
-    pub async fn rich_menu_alias_list(&self) -> LineApiResponse<LineApiRichMenuAliasGetResponse> {
+    pub async fn rich_menu_alias_list(&self) -> LineApiResponse<LineApiRichMenuAliasListResponse> {
         self.http_get("https://api.line.me/v2/bot/richmenu/alias/list", &json!(""))
             .await
     }
