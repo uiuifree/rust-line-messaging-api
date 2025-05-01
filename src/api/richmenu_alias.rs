@@ -26,7 +26,7 @@ impl LineClient {
         rich_menu_alias_id: String,
         value: Value,
     ) -> LineApiResponse<Value> {
-        self.http_put(
+        self.http_post(
             &format!(
                 "https://api.line.me/v2/bot/richmenu/alias/{}",
                 rich_menu_alias_id
