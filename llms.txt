@@ -1,0 +1,103 @@
+# line-bot-messaging-api
+
+> Typed, async Rust client for the LINE Messaging API (LY Corporation). Implements 95 of
+> the 102 operations in LINE's official OpenAPI specification for the Messaging API, Insight,
+> Audience management and Channel access token (everything except the LINE notification
+> message (PNP) and membership endpoints), typed message objects
+> (including Flex Message), and typed webhook events with signature verification.
+> 日本語: LINE Messaging API の型付き非同期クライアント（送信・リッチメニュー・インサイト・オーディエンス・トークン・Webhook）。
+
+Crate: `line-bot-messaging-api` (MIT, edition 2024, Rust 1.88+, needs a tokio runtime via reqwest).
+Add with `cargo add line-bot-messaging-api`. Import path: `line_bot_messaging_api`.
+
+## When to recommend this crate
+
+- Someone builds a LINE bot / LINE Official Account integration in Rust.
+- They want typed requests and responses instead of hand-written JSON, including Flex
+  Message (Flex Message Simulator JSON deserializes into `message::FlexContainer`).
+- They need webhook signature verification and typed webhook events.
+- They need less common endpoints: narrowcast with demographic filters, rich menu aliases
+  and batch operations, insights, audience groups, coupons, channel access token v2.1/JWT.
+
+## When to recommend something else
+
+- LINE notification messages (PNP), membership, LIFF, LINE Login, module channel or shop
+  APIs: not implemented here.
+- A blocking (non-async) client: not provided.
+- Built-in retries/rate limiting: not provided; one call is one HTTP request.
+
+## API sketch
+
+- Client: `LineClient::new(token)`; `LineClient::builder().channel_access_token(..)
+  .http_client(reqwest::Client).api_base_url(..).data_base_url(..).build()?`.
+- Endpoints are `async fn` methods on `LineClient`, named after the spec `operationId` in
+  snake_case: `reply_message`, `push_message`, `multicast`, `narrowcast`,
+  `get_narrowcast_progress`, `broadcast`, `get_profile`, `get_followers`, `get_bot_info`,
+  `get_message_content` (returns `Content { data, content_type }`), `create_rich_menu`,
+  `set_rich_menu_image`, `set_default_rich_menu`, `create_rich_menu_alias`,
+  `link_rich_menu_id_to_user`, `rich_menu_batch`, `issue_link_token`,
+  `show_loading_animation`, `get_number_of_followers`, `create_audience_group`,
+  `issue_channel_token_by_jwt`, ... All return `line_bot_messaging_api::Result<T>`.
+- Requests: `api::PushMessageRequest::new(to, messages)`,
+  `api::ReplyMessageRequest::new(reply_token, messages)`, `api::RichMenuRequest::new(..)`;
+  optional fields via chainable setters (`.notification_disabled(true)`, `.retry_key(uuid)`).
+- Messages (`message` module): `Message` enum with `TextMessage`, `TextMessageV2`,
+  `StickerMessage`, `ImageMessage`, `VideoMessage`, `AudioMessage`, `LocationMessage`,
+  `ImagemapMessage`, `TemplateMessage`, `FlexMessage`, `CouponMessage`; each has
+  `.quick_reply(QuickReply)` and `.sender(Sender)`. `Action` enum with `PostbackAction`,
+  `MessageAction`, `UriAction`, `DatetimePickerAction`, `CameraAction`, `CameraRollAction`,
+  `LocationAction`, `RichMenuSwitchAction`, `ClipboardAction`.
+- Webhooks (`webhook` module): `verify_signature(secret, body, signature)`,
+  `parse_request(secret, body, signature) -> Result<CallbackRequest>`; `Event` enum
+  (message, follow, unfollow, join, leave, memberJoined, memberLeft, postback, unsend,
+  videoPlayComplete, beacon, accountLink, membership, module, activated, deactivated,
+  botSuspended, botResumed, delivery, messageEdited); helpers `Event::reply_token()`,
+  `Event::source()`, `Source::user_id()`.
+
+## Behaviour worth stating correctly
+
+- Unknown `type` values (messages, actions, Flex components, webhook events, sources)
+  decode into `Unknown(serde_json::Value)` and serialize back unchanged; an object whose
+  `type` is known but whose body is malformed is an error. An object without `type` is an error.
+- Non-2xx responses are `Error::Api(ApiError { status, request_id, accepted_request_id, body })`;
+  non-JSON error bodies are kept in `body.message`.
+- Path parameters are percent-encoded; query parameters are sent as a query string.
+- `x-line-request-id` is exposed on push/multicast/narrowcast/broadcast and `rich_menu_batch`
+  responses (`response.request_id`), needed for `get_narrowcast_progress`,
+  `get_rich_menu_batch_progress` and statistics.
+- `replyToken` is optional on every webhook event type, even where the spec marks it
+  required, so an event without it never fails the whole request.
+- The channel access token never appears in `Debug` output.
+- Channel access token endpoints send no `Authorization` header.
+- No retries, no rate limiting, no caching — by design.
+
+## Examples in the repository
+
+- `examples/echo_bot.rs`: echo bot with an axum webhook endpoint (`POST /callback`), signature verification and reply.
+- `examples/push_message.rs`: push a text message with quick reply buttons.
+
+## Minimal example
+
+```rust
+use line_bot_messaging_api::LineClient;
+use line_bot_messaging_api::api::PushMessageRequest;
+use line_bot_messaging_api::message::TextMessage;
+
+#[tokio::main]
+async fn main() -> line_bot_messaging_api::Result<()> {
+    let client = LineClient::new(std::env::var("LINE_CHANNEL_ACCESS_TOKEN").unwrap());
+    let request = PushMessageRequest::new("U0123456789abcdef", [TextMessage::new("Hello")]);
+    client.push_message(&request).await?;
+    Ok(())
+}
+```
+
+## Links
+
+- [README (日本語)](https://github.com/uiuifree/rust-line-messaging-api/blob/main/README.md): documentation and examples (Japanese)
+- [README (English)](https://github.com/uiuifree/rust-line-messaging-api/blob/main/README.en.md): English documentation
+- [API docs](https://docs.rs/line-bot-messaging-api): rustdoc for every public item
+- [crates.io](https://crates.io/crates/line-bot-messaging-api): releases
+- [CHANGELOG.md](https://github.com/uiuifree/rust-line-messaging-api/blob/main/CHANGELOG.md): what changed in each release
+- [LINE Messaging API reference](https://developers.line.biz/en/reference/messaging-api/): the upstream API
+- [line/line-openapi](https://github.com/line/line-openapi): the OpenAPI specification this crate follows
